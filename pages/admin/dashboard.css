@@ -1,0 +1,37 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.dheader{
+    text-align: center;
+}
+
+.workcard{
+
+    margin: 50px 0;
+    background-color: aliceblue;
+    height: 10vh;
+    justify-content: center;
+    border: 1px solid grey;
+ position: absolute;
+    display:flex ;
+}
+.items{
+    width: 20%;
+    margin: 0 10px ;
+    padding: 20px;
+    border-radius: 20%;
+    align-content: center;
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+.items:hover{
+    transition: all 0.5s ease;
+    background-color: blue;
+    color: white;
+    position: relative;
+    bottom: 5px;
+
+}
+

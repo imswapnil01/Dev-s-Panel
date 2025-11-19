@@ -1,0 +1,111 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body {
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  /* margin-top: 30px; */
+
+}
+
+.container {
+  background: white;
+  width: 100%;
+  max-width: 430px;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-top: 30px; 
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #4a90e2;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #357abd;
+}
+
+.captcha-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background: #eef3ff;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  border: 1px solid #cdd8ff;
+}
+
+.captcha-box button{
+ width: 40px;
+ padding-bottom: 10px;
+ 
+}
+
+.captcha-text {
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 3px;
+}
+
+.forgot {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.forgot a {
+  color: #4a90e2;
+  text-decoration: none;
+}
+
+.otp-section {
+  display: none;
+  margin-top: 10px;
+}
+
+#otpMessage {
+  color: green;
+  font-size: 14px;
+  margin-bottom: 10px;
+}

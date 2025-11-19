@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Panel</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f1f3f6;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 240px;
+        height: 100vh;
+        background: #303841;
+        color: white;
+        padding-top: 30px;
+    }
+
+    .sidebar h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 20px;
+    }
+
+    .sidebar a {
+        display: block;
+        padding: 15px 20px;
+        color: white;
+        text-decoration: none;
+        font-size: 15px;
+    }
+
+    .sidebar a:hover, .active {
+        background: #3a4750;
+    }
+
+    /* Main Content */
+    .main {
+        margin-left: 240px;
+        padding: 25px;
+    }
+
+    .section {
+        display: none;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    .section.active-section {
+        display: block;
+    }
+
+    h3 {
+        margin-top: 0;
+        color: #333;
+    }
+
+    ul {
+        margin-top: 10px;
+        padding-left: 20px;
+    }
+
+    ul li {
+        margin-bottom: 8px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .sidebar {
+            position: relative;
+            width: 100%;
+            height: auto;
+        }
+        .main {
+            margin-left: 0;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h2>User Panel</h2>
+    <a href="#" onclick="showSection('profile')" class="active" id="profileBtn">Profile Settings</a>
+    <a href="#" onclick="showSection('work')" id="workBtn">User Work</a>
+    <a href="#" onclick="showSection('applications')" id="applicationsBtn">Applied Applications</a>
+    <a href="#" onclick="showSection('schemes')" id="schemesBtn">Various Schemes</a>
+    <a href="#" onclick="showSection('advantages')" id="advantagesBtn">Advantages</a>
+</div>
+
+<!-- Main Content -->
+<div class="main">
+
+    <!-- Profile Section -->
+    <div class="section active-section" id="profile">
+        <h3>User Profile Settings</h3>
+        <p>• View and update user profile details</p>
+        <p>• Change contact details, email, address, etc.</p>
+        <p>• Upload profile photo</p>
+        <button>Update Profile</button>
+    </div>
+
+    <!-- Work Section -->
+    <div class="section" id="work">
+        <h3>User Work</h3>
+        <p>• Assigned tasks</p>
+        <p>• Pending work</p>
+        <p>• Completed tasks</p>
+        <button>View Work Details</button>
+    </div>
+
+    <!-- Applications Section -->
+    <div class="section" id="applications">
+        <h3>User Applied Applications</h3>
+        <p>• Check the status of your applications</p>
+        <p>• Track approvals and rejections</p>
+        <p>• Download receipts or certificates</p>
+        <button>View Applications</button>
+    </div>
+
+    <!-- Schemes Section -->
+    <div class="section" id="schemes">
+        <h3>Various Schemes</h3>
+        <p>Below are the government/public schemes available for you:</p>
+
+        <ul>
+            <li><strong>PM Awas Yojana</strong> – Housing subsidy for eligible beneficiaries.</li>
+            <li><strong>Scholarship Schemes</strong> – Financial aid for students.</li>
+            <li><strong>Health Insurance Scheme</strong> – Medical benefits for low-income families.</li>
+            <li><strong>Farmer Support Scheme</strong> – Direct income support for farmers.</li>
+            <li><strong>Women Empowerment Scheme</strong> – Financial help for women entrepreneurs.</li>
+        </ul>
+
+        <button>Explore More Schemes</button>
+    </div>
+
+    <!-- Advantages Section -->
+    <div class="section" id="advantages">
+        <h3>Advantages</h3>
+        <p>Benefits available to registered users:</p>
+
+        <ul>
+            <li>✔ Access to personalized services</li>
+            <li>✔ Track applications and work status</li>
+            <li>✔ Faster approval processing</li>
+            <li>✔ Priority support and communication</li>
+            <li>✔ Easy access to schemes and benefits</li>
+        </ul>
+
+        <button>View All Benefits</button>
+    </div>
+
+</div>
+
+<script>
+function showSection(sectionId) {
+    document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active-section');
+    });
+
+    document.getElementById(sectionId).classList.add('active-section');
+
+    document.querySelectorAll('.sidebar a').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    document.getElementById(sectionId + "Btn").classList.add('active');
+}
+</script>
+
+</body>
+</html>

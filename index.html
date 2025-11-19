@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <!-- main header content -->
+        <div class="header">
+            <h1>Admin Panel</h1>
+            <!-- search button -->
+            <div class="search">
+                <input type="search">
+                <img src="assets/search-icon.png" alt="img" height="20px"
+                    style=" border-radius: 50%; padding: 3px; background-color: rgb(240, 240, 240);">
+            </div>
+
+            <!-- profile -->
+            <div class="profile">
+                <img src="assets/profile.png" alt="profile" height="40px">
+                <span class="pname">User Name</span>
+            </div>
+        </div>
+    </header>
+
+
+    <div class="container">
+        <!-- aside secion  -->
+        <aside>
+            <div class="sidebar">
+                <ul>
+                    <li onclick="loadPage('admin_')">Dashboard</li>
+                    <li onclick="loadPage('users')">Users</li>
+                    <li onclick="loadPage('events')">Events</li>
+                    <li onclick="loadPage('settings')">Settings</li>
+                    <li>Log out</li>
+                </ul>
+            </div>        
+        </aside>
+
+        <main id="main-content" class="maincontent">
+            <!-- Dynamic content will load here -->
+            <h1>this is main content page for admin panel </h1>
+        </main>
+        
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+
+</html>

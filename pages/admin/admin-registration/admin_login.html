@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="admin_login.css">
+
+
+</head>
+
+<body>
+    <div class="container">
+        <div>
+            <h2>Admin Login</h2>
+
+            <!-- LOGIN INPUTS -->
+            <div class="form-group">
+                <label>Login ID (Name / Email / Phone / AUID / Emp ID)</label>
+                <input type="text" id="loginId" placeholder="Enter login ID" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Enter password" required>
+            </div>
+
+            <div class="form-group">
+                <label>Additional Verification</label>
+                <select id="verificationType">
+                    <option value="">Select one</option>
+                    <option value="grandfather">Grandfather's Name</option>
+                    <option value="pet">Favourite Pet Name</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="verificationInput" placeholder="Enter answer">
+            </div>
+
+            <div class="captcha-box">
+                <span class="captcha-text" id="captcha"></span>
+                <button type="button" onclick="generateCaptcha()">↻</button>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="captchaInput" placeholder="Enter CAPTCHA" required>
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" id="robotCheck"> I am not a robot
+            </div>
+
+            <!-- OTP BEFORE LOGIN -->
+            <button onclick="sendOtp()">Generate OTP</button>
+
+            <div id="otpMessage"></div>
+
+            <div class="otp-section" id="otpSection">
+                <input type="text" id="otpInput" placeholder="Enter OTP">
+            </div>
+
+            <button onclick="validateLogin()">Login</button>
+
+            <div class="forgot">
+                <a href="#" onclick="forgotPassword()">Forgot Password?</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate random alphanumeric CAPTCHA
+        function generateCaptcha() {
+            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            let captcha = "";
+            for (let i = 0; i < 6; i++) {
+                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById("captcha").textContent = captcha;
+            return captcha;
+        }
+        let currentCaptcha = generateCaptcha();
+
+        // OTP Generator (Simulated)
+        let generatedOTP = null;
+
+        function sendOtp() {
+            generatedOTP = Math.floor(100000 + Math.random() * 900000);
+
+            document.getElementById("otpMessage").innerHTML =
+                "OTP sent to your registered email & mobile number: <b>" + generatedOTP + "</b>";
+
+            document.getElementById("otpSection").style.display = "block";
+        }
+
+        function validateLogin() {
+            const loginId = document.getElementById("loginId").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const verification = document.getElementById("verificationInput").value.trim();
+            const captchaInput = document.getElementById("captchaInput").value.trim();
+            const otpInput = document.getElementById("otpInput").value.trim();
+            const robotCheck = document.getElementById("robotCheck").checked;
+
+            if (!loginId || !password || !verification) {
+                alert("Please fill all details.");
+                return;
+            }
+
+            if (!robotCheck) {
+                alert("Please confirm you are not a robot.");
+                return;
+            }
+
+            if (captchaInput !== document.getElementById("captcha").textContent) {
+                alert("Invalid CAPTCHA!");
+                generateCaptcha();
+                return;
+            }
+
+            if (otpInput != generatedOTP) {
+                alert("Incorrect OTP!");
+                return;
+            }
+
+            alert("Login Successful!");
+        }
+
+        function forgotPassword() {
+            alert("Forgot Password → Email OTP System To Be Integrated With Backend.");
+        }
+    </script>
+
+</body>
+
+</html>
