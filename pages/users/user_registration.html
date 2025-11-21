@@ -1,256 +1,261 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>User Registration Form</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Registration Form</title>
 
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f3f4f6;
-    padding: 20px;
-  }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      padding: 20px;
+    }
 
-  .container {
-    background: white;
-    max-width: 700px;
-    margin: auto;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
+    .container {
+      background: white;
+      max-width: 700px;
+      margin: auto;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-  }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
 
-  .form-group {
-    margin-bottom: 15px;
-  }
+    .form-group {
+      margin-bottom: 15px;
+    }
 
-  label {
-    font-size: 14px;
-    margin-bottom: 5px;
-    display: block;
-  }
+    label {
+      font-size: 14px;
+      margin-bottom: 5px;
+      display: block;
+    }
 
-  input, textarea, select {
-    width: 100%;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-  }
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
 
-  input[readonly] {
-    background: #eef3ff;
-    border-color: #cfdcff;
-  }
+    input[readonly] {
+      background: #eef3ff;
+      border-color: #cfdcff;
+    }
 
-  textarea {
-    height: 70px;
-    resize: vertical;
-  }
+    textarea {
+      height: 70px;
+      resize: vertical;
+    }
 
-  .row {
-    display: flex;
-    gap: 15px;
-  }
+    .row {
+      display: flex;
+      gap: 15px;
+    }
 
-  .row .form-group {
-    flex: 1;
-  }
+    .row .form-group {
+      flex: 1;
+    }
 
-  button {
-    width: 100%;
-    padding: 12px;
-    background: #4a90e2;
-    border: none;
-    color: white;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-  }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #4a90e2;
+      border: none;
+      color: white;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-  button:hover {
-    background: #357abd;
-  }
+    button:hover {
+      background: #357abd;
+    }
 
-  .section-title {
-    font-weight: bold;
-    margin-top: 25px;
-    margin-bottom: 10px;
-    color: #444;
-  }
+    .section-title {
+      font-weight: bold;
+      margin-top: 25px;
+      margin-bottom: 10px;
+      color: #444;
+    }
 
-  .terms-box {
-    background: #eef3ff;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #cfdcff;
-    margin-bottom: 10px;
-    font-size: 13px;
-    color: #333;
-  }
-</style>
+    .terms-box {
+      background: #eef3ff;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #cfdcff;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: #333;
+    }
+  </style>
 
 </head>
+
 <body>
 
-<div class="container">
-  <h2>User Registration Form</h2>
+  <div class="container">
+    <h2>User Registration Form</h2>
 
-  <!-- Permanent User ID (Auto Generated) -->
-  <div class="form-group">
-    <label>Permanent User ID</label>
-    <input type="text" id="userId" readonly>
-  </div>
-
-  <!-- Personal Details -->
-  <div class="section-title">Personal Details</div>
-
-  <div class="form-group">
-    <label>First Name</label>
-    <input type="text" required>
-  </div>
-
-  <div class="form-group">
-    <label>Father Name</label>
-    <input type="text" required>
-  </div>
-
-  <div class="form-group">
-    <label>Surname</label>
-    <input type="text" required>
-  </div>
-
-  <div class="form-group">
-    <label>Mother Name</label>
-    <input type="text" required>
-  </div>
-
-  <div class="form-group">
-    <label>Husband / Wife / Guardian Name</label>
-    <input type="text">
-  </div>
-
-  <div class="form-group">
-    <label>Date of Birth</label>
-    <input type="date" required>
-  </div>
-
-  <div class="row">
+    <!-- Permanent User ID (Auto Generated) -->
     <div class="form-group">
-      <label>Contact Number</label>
-      <input type="text" maxlength="10" required>
+      <label>Permanent User ID</label>
+      <input type="text" id="userId" readonly>
     </div>
 
+    <!-- Personal Details -->
+    <div class="section-title">Personal Details</div>
+
     <div class="form-group">
-      <label>Email Address</label>
-      <input type="email" required>
-    </div>
-  </div>
-
-  <!-- Address Details -->
-  <div class="section-title">Address Details</div>
-
-  <div class="form-group">
-    <label>Local Address</label>
-    <textarea required></textarea>
-  </div>
-
-  <div class="form-group">
-    <label>Current Address</label>
-    <textarea required></textarea>
-  </div>
-
-  <div class="form-group">
-    <label>Permanent Address</label>
-    <textarea required></textarea>
-  </div>
-
-  <div class="row">
-    <div class="form-group">
-      <label>District</label>
+      <label>First Name</label>
       <input type="text" required>
     </div>
 
     <div class="form-group">
-      <label>Taluka</label>
+      <label>Father Name</label>
       <input type="text" required>
     </div>
+
+    <div class="form-group">
+      <label>Surname</label>
+      <input type="text" required>
+    </div>
+
+    <div class="form-group">
+      <label>Mother Name</label>
+      <input type="text" required>
+    </div>
+
+    <div class="form-group">
+      <label>Husband / Wife / Guardian Name</label>
+      <input type="text">
+    </div>
+
+    <div class="form-group">
+      <label>Date of Birth</label>
+      <input type="date" required>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>Contact Number</label>
+        <input type="text" maxlength="10" required>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" required>
+      </div>
+    </div>
+
+    <!-- Address Details -->
+    <div class="section-title">Address Details</div>
+
+    <div class="form-group">
+      <label>Local Address</label>
+      <textarea required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Current Address</label>
+      <textarea required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Permanent Address</label>
+      <textarea required></textarea>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>District</label>
+        <input type="text" required>
+      </div>
+
+      <div class="form-group">
+        <label>Taluka</label>
+        <input type="text" required>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Pin Code</label>
+      <input type="text" maxlength="6" required>
+    </div>
+
+    <!-- Documents -->
+    <div class="section-title">Document Uploads</div>
+
+    <div class="form-group">
+      <label>Photo (Less than 100 KB)</label>
+      <input type="file" accept="image/*" required>
+    </div>
+
+    <div class="form-group">
+      <label>Aadhar Card</label>
+      <input type="file" accept="image/*,.pdf" required>
+    </div>
+
+    <div class="form-group">
+      <label>PAN Card</label>
+      <input type="file" accept="image/*,.pdf">
+    </div>
+
+    <div class="form-group">
+      <label>Ration Card</label>
+      <input type="file" accept="image/*,.pdf">
+    </div>
+
+    <div class="form-group">
+      <label>Electricity Bill</label>
+      <input type="file" accept="image/*,.pdf">
+    </div>
+
+    <!-- Terms -->
+    <div class="section-title">Terms & Conditions</div>
+
+    <div class="terms-box">
+      By submitting this form, you confirm that all provided information and documents are accurate.
+      Any false information may result in rejection of the application or legal action.
+    </div>
+
+    <div class="form-group">
+      <input type="checkbox" id="termsCheck"> I agree to the Terms & Conditions
+    </div>
+
+    <button onclick="return validateForm()">Register</button>
   </div>
 
-  <div class="form-group">
-    <label>Pin Code</label>
-    <input type="text" maxlength="6" required>
-  </div>
-
-  <!-- Documents -->
-  <div class="section-title">Document Uploads</div>
-
-  <div class="form-group">
-    <label>Photo (Less than 100 KB)</label>
-    <input type="file" accept="image/*" required>
-  </div>
-
-  <div class="form-group">
-    <label>Aadhar Card</label>
-    <input type="file" accept="image/*,.pdf" required>
-  </div>
-
-  <div class="form-group">
-    <label>PAN Card</label>
-    <input type="file" accept="image/*,.pdf">
-  </div>
-
-  <div class="form-group">
-    <label>Ration Card</label>
-    <input type="file" accept="image/*,.pdf">
-  </div>
-
-  <div class="form-group">
-    <label>Electricity Bill</label>
-    <input type="file" accept="image/*,.pdf">
-  </div>
-
-  <!-- Terms -->
-  <div class="section-title">Terms & Conditions</div>
-
-  <div class="terms-box">
-    By submitting this form, you confirm that all provided information and documents are accurate.  
-    Any false information may result in rejection of the application or legal action.
-  </div>
-
-  <div class="form-group">
-    <input type="checkbox" id="termsCheck"> I agree to the Terms & Conditions
-  </div>
-
-  <button onclick="return validateForm()">Register</button>
-</div>
-
-<script>
-  // Auto-generate Permanent User ID
-  function generateUserID() {
-    const random = Math.floor(100000 + Math.random() * 900000); 
-    return "USR-" + random;
-  }
-
-  document.getElementById("userId").value = generateUserID();
-
-  // Validate Form
-  function validateForm() {
-    if (!document.getElementById("termsCheck").checked) {
-      alert("Please accept the Terms & Conditions.");
-      return false;
+  <script>
+    // Auto-generate Permanent User ID
+    function generateUserID() {
+      const random = Math.floor(100000 + Math.random() * 900000);
+      return "USR-" + random;
     }
-    alert("Registration submitted successfully!");
-    return true;
-  }
-</script>
+
+    document.getElementById("userId").value = generateUserID();
+
+    // Validate Form
+    function validateForm() {
+      if (!document.getElementById("termsCheck").checked) {
+        alert("Please accept the Terms & Conditions.");
+        return false;
+      }
+      alert("Registration submitted successfully!");
+      return true;
+    }
+  </script>
 
 </body>
+
 </html>

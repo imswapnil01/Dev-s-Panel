@@ -1,0 +1,174 @@
+<!-- ============================= -->
+<!-- ADMIN DATA ENTRY FORM         -->
+<!-- ============================= -->
+
+<div class="form-container"
+    style="max-width:600px;margin:20px auto;padding:20px;border:1px solid #e5e7eb;border-radius:12px;background:white;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+
+    <h2 style="font-size:22px;margin-bottom:15px;text-align:center;color:#1f2937;">
+        Admin Entry Form
+    </h2>
+
+    <div style="display:flex;flex-direction:column;gap:15px;">
+
+        <!-- Auto Application Number -->
+        <div>
+            <label>Application Number (Auto Generated)</label>
+            <input id="adminAppNo" type="text" disabled
+                style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;background:#f3f4f6;">
+        </div>
+
+        <!-- Work Name -->
+        <div>
+            <label>Work Name</label>
+            <input id="adminWorkName" type="text" placeholder="Enter work name"
+                style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;">
+        </div>
+
+        <!-- Scheme Dropdown -->
+        <div>
+            <label>Scheme</label>
+            <select id="adminScheme" style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;">
+                <option value="">Select Scheme</option>
+                <option>Khasdar Nidhi</option>
+                <option>PM Nidhi</option>
+                <option>CM Nidhi</option>
+                <option>Mahanagar Palika Fund</option>
+                <option>Other Scheme</option>
+            </select>
+        </div>
+
+        <!-- City/Village -->
+        <div>
+            <label>City / Village</label>
+            <input id="adminCityVillage" type="text" placeholder="Enter city or village"
+                style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;">
+        </div>
+
+        <!-- Taluka -->
+        <div>
+            <label>Taluka</label>
+            <input id="adminTaluka" type="text" placeholder="Enter taluka"
+                style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;">
+        </div>
+
+        <!-- Contact -->
+        <div>
+            <label>Contact Number</label>
+            <input id="adminContact" type="number" placeholder="Enter contact number"
+                style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;">
+        </div>
+
+        <!-- Applicant Name -->
+        <div>
+            <label>Applicant Name</label>
+            <input id="adminApplicantName" type="text" placeholder="Enter applicant name"
+                style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;">
+        </div>
+
+        <!-- Applicant Address -->
+        <div>
+            <label>Applicant Address</label>
+            <textarea id="adminApplicantAddress" placeholder="Enter applicant address"
+                style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;"></textarea>
+        </div>
+
+        <!-- Image Upload -->
+        <div>
+            <label>Upload Applicant Image (Max 100 KB)</label>
+            <input id="adminImage" type="file" accept="image/*"
+                style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;">
+        </div>
+
+        <!-- Submit Button -->
+        <button onclick="submitAdminForm()"
+            style="padding:12px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;">
+            Save Record
+        </button>
+
+    </div>
+</div>
+
+
+
+
+<script>
+
+    // AUTO-GENERATE SEQUENTIAL APPLICATION ID
+    function generateAdminID() {
+        document.getElementById("adminAppNo").value = entries.length + 1;
+    }
+    generateAdminID();
+
+
+    // ===========================
+    // SUBMIT ADMIN ENTRY FORM
+    // ===========================
+
+    function submitAdminForm() {
+
+        const appNo = document.getElementById("adminAppNo").value;
+        const workName = document.getElementById("adminWorkName").value;
+        const scheme = document.getElementById("adminScheme").value;
+        const cityVillage = document.getElementById("adminCityVillage").value;
+        const taluka = document.getElementById("adminTaluka").value;
+        const contact = document.getElementById("adminContact").value;
+        const applicant = document.getElementById("adminApplicantName").value;
+        const address = document.getElementById("adminApplicantAddress").value;
+
+        const fileInput = document.getElementById("adminImage");
+        const file = fileInput.files[0];
+
+        // IMAGE SIZE CHECK
+        if (!file) {
+            alert("Image is required!");
+            return;
+        }
+
+        if (file.size > 100 * 1024) {
+            alert("Image size must be less than 100 KB.");
+            return;
+        }
+
+        // READ IMAGE DATA URL
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            let imageData = e.target.result;
+
+            entries.push({
+                appNo,
+                workName,
+                scheme,
+                cityVillage,
+                taluka,
+                contact,
+                applicant,
+                address,
+                image: imageData
+            });
+
+            // RE-SEQUENCE IDS (Option A)
+            resequenceIDs();
+
+            // Re-render table & charts
+            renderTable();
+            updateCharts();
+
+            alert("Record saved successfully!");
+
+            // RESET FORM
+            document.querySelector(".form-container input[type=text]").value = "";
+            document.querySelector(".form-container textarea").value = "";
+            document.getElementById("adminScheme").value = "";
+            document.getElementById("adminCityVillage").value = "";
+            document.getElementById("adminTaluka").value = "";
+            document.getElementById("adminContact").value = "";
+            fileInput.value = "";
+
+            generateAdminID();
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+</script>

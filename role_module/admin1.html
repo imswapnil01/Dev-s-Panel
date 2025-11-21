@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Admin CRUD Panel — Sequential IDs + Image + Multi Charts</title>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg: #f3f6f9;
+            --card: #ffffff;
+            --accent: #4a90e2;
+            --muted: #6b7280;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: var(--bg);
+            color: #111827;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 18px auto;
+            padding: 18px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 14px;
+            font-size: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 430px;
+            gap: 18px;
+            align-items: start;
+        }
+
+        /* Form card */
+        .card {
+            background: var(--card);
+            padding: 14px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: var(--muted);
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 9px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        textarea {
+            min-height: 76px;
+            resize: vertical;
+        }
+
+        .row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .row .col {
+            flex: 1;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-ghost {
+            background: #f8fafc;
+            color: #111827;
+            border: 1px solid #e6e9ee;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .small {
+            font-size: 13px;
+            padding: 8px 10px;
+        }
+
+        /* Table */
+        .table-wrap {
+            overflow: auto;
+            margin-top: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(16, 24, 40, 0.04);
+        }
+
+        th,
+        td {
+            padding: 10px 8px;
+            text-align: left;
+            border-bottom: 1px solid #eef2f6;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        th {
+            background: #0f172a;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        td img.thumb {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #e6eefc;
+        }
+
+        .actions {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+
+        .meta {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* Charts layout */
+        .charts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        canvas {
+            background: var(--card);
+            border-radius: 8px;
+            padding: 8px;
+            box-shadow: 0 6px 18px rgba(16, 24, 40, 0.04);
+        }
+
+        /* Responsive */
+        @media (max-width: 980px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .charts {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* utility */
+        .note {
+            font-size: 12px;
+            color: #374151;
+            background: #eef2ff;
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 6px;
+        }
+
+        .error {
+            color: #b91c1c;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Admin CRUD Panel — Sequential IDs, Image (≤100KB) & Multi-Chart Reports</h1>
+
+        <div class="grid">
+
+            <!-- LEFT: Form + Table -->
+            <div>
+                <div class="card">
+                    <h3 style="margin:0 0 8px 0">Add / Edit Application</h3>
+
+                    <div style="display:flex;gap:12px;align-items:center;margin-bottom:10px;">
+                        <div style="flex:1;">
+                            <label>Application Number (auto)</label>
+                            <input type="text" id="appNo" readonly>
+                            <div class="meta" style="margin-top:6px">Sequential, gapless — recalculates after deletes
+                                (Option A)</div>
+                        </div>
+                        <div style="width:150px">
+                            <label>Image (≤100 KB) <small style="color:var(--muted)">(required)</small></label>
+                            <input type="file" id="imgInput" accept="image/*">
+                            <div id="imgNote" class="note" style="display:none;margin-top:8px"></div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-bottom:10px;">
+                        <div class="col">
+                            <label>Name of Work</label>
+                            <input type="text" id="workName" placeholder="Enter work name">
+                        </div>
+                        <div class="col">
+                            <label>Scheme</label>
+                            <select id="schemeSelect">
+                                <option value="">-- Select Scheme --</option>
+                                <option value="khasdar nidhi">khasdar nidhi</option>
+                                <option value="PM nidhi">PM nidhi</option>
+                                <option value="CM nidhi">CM nidhi</option>
+                                <option value="mahanager palika fund">mahanager palika fund</option>
+                                <option value="other">Other / etc</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-bottom:10px;">
+                        <div class="col">
+                            <label>City / Village</label>
+                            <input type="text" id="cityVillage" placeholder="City or Village name">
+                        </div>
+                        <div class="col">
+                            <label>Taluka</label>
+                            <input type="text" id="taluka" placeholder="Taluka">
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-bottom:10px;">
+                        <div class="col">
+                            <label>Contact Detail</label>
+                            <input type="tel" id="contact" placeholder="Phone number">
+                        </div>
+                        <div class="col">
+                            <label>Applicant Name & Address</label>
+                            <input type="text" id="applicant" placeholder="Applicant name and short address">
+                        </div>
+                    </div>
+
+                    <div class="controls">
+                        <button class="btn btn-primary small" id="saveBtn">Save</button>
+                        <button class="btn btn-ghost small" id="updateBtn" disabled>Update</button>
+                        <button class="btn small" id="clearBtn">Clear</button>
+                        <div style="flex:1"></div>
+                        <div style="text-align:right;font-size:13px;color:var(--muted)">Entries: <span
+                                id="countLabel">0</span></div>
+                    </div>
+
+                    <div id="errorMsg" class="error" style="display:none"></div>
+                </div>
+
+
+
+                
+                <!-- Table -->
+                <div class="table-wrap" style="margin-top:12px">
+                    <table id="recordsTable">
+                        <thead>
+                            <tr>
+                                <th style="width:90px">App No.</th>
+                                <th>Work</th>
+                                <th>Scheme</th>
+                                <th>City/Village</th>
+                                <th>Taluka</th>
+                                <th>Contact</th>
+                                <th>Applicant</th>
+                                <th style="width:120px">Image</th>
+                                <th style="width:150px">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- RIGHT: Charts -->
+            <div>
+                <div class="card">
+                    <h3 style="margin:0 0 10px 0">Reports</h3>
+                    <div style="font-size:13px;color:var(--muted);margin-bottom:8px">
+                        Live charts grouped by Taluka, City/Village, Work and Scheme.
+                    </div>
+
+                    <!-- Report Type Dropdown -->
+                    <div style="margin-bottom:10px;">
+                        <label style="font-size:14px;color:#4b5563">Select Report Type</label>
+                        <select id="reportType"
+                            style="width:100%;padding:8px;border-radius:6px;border:1px solid #d1d5db;">
+                            <option value="all">Show All Reports</option>
+                            <option value="taluka">Taluka Report</option>
+                            <option value="city">City/Village Report</option>
+                            <option value="work">Work Report</option>
+                            <option value="scheme">Scheme Report</option>
+                        </select>
+                    </div>
+
+
+                    <div class="charts">
+
+                        <div id="chartTalukaBox">
+                            <canvas id="chartTaluka" height="220"></canvas>
+                        </div>
+
+                        <div id="chartCityBox">
+                            <canvas id="chartCity" height="220"></canvas>
+                        </div>
+
+                        <div id="chartWorkBox">
+                            <canvas id="chartWork" height="220"></canvas>
+                        </div>
+
+                        <div id="chartSchemeBox">
+                            <canvas id="chartScheme" height="220"></canvas>
+                        </div>
+
+                    </div>
+                    <div style="margin-top:10px;display:flex;gap:8px;align-items:center;">
+                        <button class="btn btn-ghost small" id="exportJson">Export JSON</button>
+                        <button class="btn btn-ghost small" id="importJson">Import JSON</button>
+                        <input id="jsonFile" type="file" accept=".json" style="display:none">
+                        <div style="flex:1"></div>
+                        <button class="btn btn-danger small" id="clearAll">Clear All</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        /* -----------------------
+           Data model & helpers
+           ----------------------- */
+        let entries = [];           // main in-memory data array
+        let editIndex = -1;         // -1 = create mode; >=0 = edit mode
+        const MAX_IMAGE_SIZE = 100 * 1024; // 100 KB
+
+        // DOM refs
+        const appNoEl = document.getElementById('appNo');
+        const imgInput = document.getElementById('imgInput');
+        const imgNote = document.getElementById('imgNote');
+        const workNameEl = document.getElementById('workName');
+        const schemeEl = document.getElementById('schemeSelect');
+        const cityEl = document.getElementById('cityVillage');
+        const talukaEl = document.getElementById('taluka');
+        const contactEl = document.getElementById('contact');
+        const applicantEl = document.getElementById('applicant');
+        const saveBtn = document.getElementById('saveBtn');
+        const updateBtn = document.getElementById('updateBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const tableBody = document.querySelector('#recordsTable tbody');
+        const errorMsg = document.getElementById('errorMsg');
+        const countLabel = document.getElementById('countLabel');
+
+        const chartTalukaCtx = document.getElementById('chartTaluka').getContext('2d');
+        const chartCityCtx = document.getElementById('chartCity').getContext('2d');
+        const chartWorkCtx = document.getElementById('chartWork').getContext('2d');
+        const chartSchemeCtx = document.getElementById('chartScheme').getContext('2d');
+
+        let charts = { taluka: null, city: null, work: null, scheme: null };
+
+        /* -----------------------
+           Utility functions
+           ----------------------- */
+        function pad(num, size = 3) { return num.toString().padStart(size, '0'); }
+
+        // generate next sequential application number based on array length
+        function nextAppNumber() {
+            return 'APP-' + pad(entries.length + 1, 3);
+        }
+
+        // reassign sequential app numbers after any delete or reordering
+        function renumberAll() {
+            entries.forEach((e, i) => { e.appNo = 'APP-' + pad(i + 1, 3); });
+        }
+
+        // show error
+        function showError(txt) {
+            errorMsg.style.display = 'block';
+            errorMsg.textContent = txt;
+            setTimeout(() => { errorMsg.style.display = 'none'; }, 5000);
+        }
+
+        /* -----------------------
+           Image handling
+           ----------------------- */
+        // convert file to base64 (for in-memory storage)
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject('File read error');
+                reader.readAsDataURL(file);
+            });
+        }
+
+        const chartBoxes = {
+            all: ["chartTalukaBox", "chartCityBox", "chartWorkBox", "chartSchemeBox"],
+            taluka: ["chartTalukaBox"],
+            city: ["chartCityBox"],
+            work: ["chartWorkBox"],
+            scheme: ["chartSchemeBox"]
+        };
+
+        document.getElementById("reportType").addEventListener("change", function () {
+            let selected = this.value;
+
+            // Hide all chart boxes first
+            Object.values(chartBoxes.all).forEach(id => {
+                document.getElementById(id).style.display = "none";
+            });
+
+            // Show selected chart(s)
+            if (selected === "all") {
+                chartBoxes.all.forEach(id => {
+                    document.getElementById(id).style.display = "block";
+                });
+            } else {
+                chartBoxes[selected].forEach(id => {
+                    document.getElementById(id).style.display = "block";
+                });
+            }
+        });
+
+        // Default state: show all
+        document.getElementById("reportType").dispatchEvent(new Event("change"));
+
+        // validate image size and show preview note
+        imgInput.addEventListener('change', async (e) => {
+            const f = e.target.files[0];
+            if (!f) { imgNote.style.display = 'none'; return; }
+            if (f.size > MAX_IMAGE_SIZE) {
+                imgNote.style.display = 'block';
+                imgNote.textContent = 'File too large — maximum 100 KB allowed. Please choose a smaller image.';
+                imgNote.style.background = '#fff5f5';
+                imgNote.style.color = '#991b1b';
+                imgInput.value = '';
+                return;
+            }
+            // preview small thumbnail note
+            imgNote.style.display = 'block';
+            imgNote.style.background = '#eef2ff';
+            imgNote.style.color = '#0f172a';
+            imgNote.textContent = `Selected: ${f.name} — ${(f.size / 1024).toFixed(1)} KB`;
+        });
+
+        /* -----------------------
+           CRUD: Save / Update / Delete
+           ----------------------- */
+        function refreshUI() {
+            renderTable();
+            updateAllCharts();
+            appNoEl.value = nextAppNumber();
+            countLabel.textContent = entries.length;
+        }
+
+        async function saveEntry() {
+            // validation
+            if (!workNameEl.value.trim()) return showError('Please enter Work Name.');
+            if (!schemeEl.value) return showError('Please select a Scheme.');
+            if (!cityEl.value.trim()) return showError('Please enter City/Village.');
+            if (!talukaEl.value.trim()) return showError('Please enter Taluka.');
+            if (!contactEl.value.trim()) return showError('Please enter Contact detail.');
+            if (!applicantEl.value.trim()) return showError('Please enter Applicant name & address.');
+
+            const file = imgInput.files[0];
+            if (!file) return showError('Image is required (≤ 100 KB).');
+            if (file.size > MAX_IMAGE_SIZE) return showError('Image exceeds 100 KB. Please choose smaller file.');
+
+            const imgData = await fileToBase64(file);
+
+            // create entry object
+            const obj = {
+                appNo: nextAppNumber(),
+                workName: workNameEl.value.trim(),
+                scheme: schemeEl.value,
+                cityVillage: cityEl.value.trim(),
+                taluka: talukaEl.value.trim(),
+                contact: contactEl.value.trim(),
+                applicant: applicantEl.value.trim(),
+                image: imgData,
+                createdAt: new Date().toISOString()
+            };
+
+            entries.push(obj);
+            clearForm();
+            refreshUI();
+        }
+
+        function editEntry(index) {
+            editIndex = index;
+            const e = entries[index];
+            appNoEl.value = e.appNo;
+            workNameEl.value = e.workName;
+            schemeEl.value = e.scheme;
+            cityEl.value = e.cityVillage;
+            // careful: fill taluka and city correctly
+            cityEl.value = e.cityVillage;
+            talukaEl.value = e.taluka;
+            contactEl.value = e.contact;
+            applicantEl.value = e.applicant;
+
+            // image: cannot pre-fill file input, but show note and preview
+            imgNote.style.display = 'block';
+            imgNote.style.background = '#eef2ff';
+            imgNote.style.color = '#0f172a';
+            imgNote.innerHTML = 'Image already uploaded (preview in table). To replace choose a new file (≤100 KB).';
+
+            saveBtn.disabled = true;
+            updateBtn.disabled = false;
+        }
+
+        async function updateEntry() {
+            if (editIndex < 0) return showError('No entry selected for update.');
+
+            // validation
+            if (!workNameEl.value.trim()) return showError('Please enter Work Name.');
+            if (!schemeEl.value) return showError('Please select a Scheme.');
+            if (!cityEl.value.trim()) return showError('Please enter City/Village.');
+            if (!talukaEl.value.trim()) return showError('Please enter Taluka.');
+            if (!contactEl.value.trim()) return showError('Please enter Contact detail.');
+            if (!applicantEl.value.trim()) return showError('Please enter Applicant name & address.');
+
+            const e = entries[editIndex];
+
+            // if a new image is selected, validate and replace
+            const file = imgInput.files[0];
+            if (file) {
+                if (file.size > MAX_IMAGE_SIZE) return showError('Image exceeds 100 KB. Please choose smaller file.');
+                e.image = await fileToBase64(file);
+            }
+
+            // update fields (appNo remains same position number until renumbering)
+            e.workName = workNameEl.value.trim();
+            e.scheme = schemeEl.value;
+            e.cityVillage = cityEl.value.trim();
+            e.taluka = talukaEl.value.trim();
+            e.contact = contactEl.value.trim();
+            e.applicant = applicantEl.value.trim();
+            e.updatedAt = new Date().toISOString();
+
+            // confirm update
+            editIndex = -1;
+            saveBtn.disabled = false;
+            updateBtn.disabled = true;
+            clearForm();
+            refreshUI();
+        }
+
+        function deleteEntry(index) {
+            if (!confirm('Delete this entry?')) return;
+            entries.splice(index, 1);     // remove
+            renumberAll();               // reassign sequential APP-### across array
+            refreshUI();
+        }
+
+        function clearForm() {
+            workNameEl.value = '';
+            schemeEl.value = '';
+            cityEl.value = '';
+            talukaEl.value = '';
+            contactEl.value = '';
+            applicantEl.value = '';
+            imgInput.value = '';
+            imgNote.style.display = 'none';
+            errorMsg.style.display = 'none';
+            editIndex = -1;
+            saveBtn.disabled = false;
+            updateBtn.disabled = true;
+            appNoEl.value = nextAppNumber();
+        }
+
+        /* -----------------------
+           Rendering table
+           ----------------------- */
+        function renderTable() {
+            // ensure appNo values are sequential and match index
+            renumberAll();
+
+            tableBody.innerHTML = '';
+            entries.forEach((e, idx) => {
+                const tr = document.createElement('tr');
+
+                const tdApp = document.createElement('td'); tdApp.textContent = e.appNo; tr.appendChild(tdApp);
+                const tdWork = document.createElement('td'); tdWork.textContent = e.workName; tr.appendChild(tdWork);
+                const tdScheme = document.createElement('td'); tdScheme.textContent = e.scheme; tr.appendChild(tdScheme);
+                const tdCity = document.createElement('td'); tdCity.textContent = e.cityVillage; tr.appendChild(tdCity);
+                const tdTaluka = document.createElement('td'); tdTaluka.textContent = e.taluka; tr.appendChild(tdTaluka);
+                const tdContact = document.createElement('td'); tdContact.textContent = e.contact; tr.appendChild(tdContact);
+                const tdApplicant = document.createElement('td'); tdApplicant.textContent = e.applicant; tr.appendChild(tdApplicant);
+
+                const tdImg = document.createElement('td');
+                const img = document.createElement('img');
+                img.src = e.image;
+                img.className = 'thumb';
+                img.alt = 'thumb';
+                tdImg.appendChild(img);
+                tr.appendChild(tdImg);
+
+                const tdAct = document.createElement('td');
+                tdAct.className = 'actions';
+                const btnEdit = document.createElement('button');
+                btnEdit.className = 'btn btn-ghost small';
+                btnEdit.textContent = 'Edit';
+                btnEdit.onclick = () => editEntry(idx);
+
+                const btnCSV = document.createElement('button');
+                btnCSV.className = 'btn btn-ghost small';
+                btnCSV.textContent = 'CSV';
+                btnCSV.onclick = () => downloadCSV(idx);
+
+                const btnXLSX = document.createElement('button');
+                btnXLSX.className = 'btn small';
+                btnXLSX.style.background = "#059669";
+                btnXLSX.style.color = "white";
+                btnXLSX.textContent = 'Excel';
+                btnXLSX.onclick = () => downloadExcel(idx);
+
+                const btnDelete = document.createElement('button');
+                btnDelete.className = 'btn btn-danger small';
+                btnDelete.textContent = 'Delete';
+                btnDelete.onclick = () => deleteEntry(idx);
+
+
+                tdAct.appendChild(btnCSV);
+                tdAct.appendChild(btnXLSX);
+                tdAct.appendChild(btnEdit);
+                tdAct.appendChild(btnDelete);
+
+                tr.appendChild(tdAct);
+
+                tableBody.appendChild(tr);
+            });
+
+            countLabel.textContent = entries.length;
+        }
+
+        /* -----------------------
+           Charts: create & update
+           ----------------------- */
+        function aggregateCounts(keyFn) {
+            const counts = {};
+            entries.forEach(e => {
+                const key = keyFn(e) || 'Unknown';
+                counts[key] = (counts[key] || 0) + 1;
+            });
+            // sort labels alphabetically for stable charts
+            const labels = Object.keys(counts).sort((a, b) => a.localeCompare(b));
+            const values = labels.map(l => counts[l]);
+            return { labels, values };
+        }
+
+        function createOrUpdateChart(chartRef, ctx, title, aggFn) {
+            const data = aggregateCounts(aggFn);
+            if (chartRef) {
+                chartRef.data.labels = data.labels;
+                chartRef.data.datasets[0].data = data.values;
+                chartRef.update();
+                return chartRef;
+            } else {
+                return new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: title,
+                            data: data.values,
+                            backgroundColor: 'rgba(58,72,80,0.7)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { ticks: { autoSkip: false } },
+                            y: { beginAtZero: true, precision: 0 }
+                        }
+                    }
+                });
+            }
+        }
+
+        function updateAllCharts() {
+            charts.taluka = createOrUpdateChart(charts.taluka, chartTalukaCtx, 'Applications by Taluka', e => e.taluka);
+            charts.city = createOrUpdateChart(charts.city, chartCityCtx, 'Applications by City/Village', e => e.cityVillage);
+            charts.work = createOrUpdateChart(charts.work, chartWorkCtx, 'Applications by Work', e => e.workName);
+            charts.scheme = createOrUpdateChart(charts.scheme, chartSchemeCtx, 'Applications by Scheme', e => e.scheme);
+        }
+
+        /* -----------------------
+           Persistence helpers (optional)
+           ----------------------- */
+        function exportJSON() {
+            const blob = new Blob([JSON.stringify(entries, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'entries.json';
+            document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+        }
+
+        function importJSON(file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const arr = JSON.parse(e.target.result);
+                    if (!Array.isArray(arr)) throw new Error('Invalid JSON structure');
+                    entries = arr.map((x, i) => ({
+                        appNo: 'APP-' + pad(i + 1, 3),
+                        workName: x.workName || '',
+                        scheme: x.scheme || '',
+                        cityVillage: x.cityVillage || '',
+                        taluka: x.taluka || '',
+                        contact: x.contact || '',
+                        applicant: x.applicant || '',
+                        image: x.image || '',
+                        createdAt: x.createdAt || new Date().toISOString()
+                    }));
+                    refreshUI();
+                } catch (err) {
+                    alert('Invalid JSON file.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        /* -----------------------
+           Wire events
+           ----------------------- */
+        saveBtn.onclick = saveEntry;
+        updateBtn.onclick = updateEntry;
+        clearBtn.onclick = clearForm;
+
+        document.getElementById('exportJson').onclick = exportJSON;
+        document.getElementById('importJson').onclick = () => document.getElementById('jsonFile').click();
+        document.getElementById('jsonFile').addEventListener('change', (ev) => {
+            const f = ev.target.files[0];
+            if (f) importJSON(f);
+        });
+
+        // clear all
+        document.getElementById('clearAll').onclick = () => {
+            if (!confirm('Clear all entries? This cannot be undone.')) return;
+            entries = [];
+            renumberAll();
+            refreshUI();
+        };
+
+        /* initialize */
+        appNoEl.value = nextAppNumber();
+        updateAllCharts();
+
+
+
+        function downloadCSV(index) {
+            const e = entries[index];
+            const headers = ["Application Number", "Work Name", "Scheme", "City/Village", "Taluka", "Contact", "Applicant"];
+            const row = [
+                e.appNo, e.workName, e.scheme, e.cityVillage, e.taluka, e.contact, e.applicant
+            ];
+
+            let csv = headers.join(",") + "\n" + row.join(",");
+
+            const blob = new Blob([csv], { type: "text/csv" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+
+            a.href = url;
+            a.download = e.appNo + ".csv";
+
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        }
+        function downloadExcel(index) {
+            const e = entries[index];
+
+            const table =
+                `<table>
+<tr><th>Field</th><th>Value</th></tr>
+<tr><td>Application Number</td><td>${e.appNo}</td></tr>
+<tr><td>Work Name</td><td>${e.workName}</td></tr>
+<tr><td>Scheme</td><td>${e.scheme}</td></tr>
+<tr><td>City/Village</td><td>${e.cityVillage}</td></tr>
+<tr><td>Taluka</td><td>${e.taluka}</td></tr>
+<tr><td>Contact</td><td>${e.contact}</td></tr>
+<tr><td>Applicant</td><td>${e.applicant}</td></tr>
+</table>`;
+
+            const blob = new Blob([table], { type: "application/vnd.ms-excel" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+
+            a.href = url;
+            a.download = `${e.appNo}.xls`;
+
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        }
+
+    </script>
+</body>
+
+</html>
